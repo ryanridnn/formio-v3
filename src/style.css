@@ -1,0 +1,215 @@
+:root {
+  --primary: #0d6efd;
+  --danger: #dc3545;
+}
+
+.csfile {
+  background: #eee !important;
+  border-radius: 1.25rem !important;
+  overflow-x: auto;
+}
+
+.csfile > div {
+  background: #eee !important;
+  border-radius: 1.25rem !important;
+  margin-bottom: 0 !important;
+  padding: 0.5rem;
+}
+
+.csfile > div > div {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+}
+
+.datagrid-table tr td {
+  /*display: flex;*/
+  padding: 1rem;
+}
+
+.file-modal {
+  width: 100%;
+  margin-bottom: 0 !important;
+}
+
+.btn-modal-open {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0px;
+  background: none;
+  outline: none;
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.file-input-main {
+  --help-color: #444;
+  --toggle-x: 0.25rem;
+  --local-display: none;
+  --url-display: block;
+}
+
+.file-checkbox {
+  display: none;
+}
+
+.file-checkbox:checked + .file-input-main {
+  --help-color: var(--primary);
+  --toggle-x: 1.25rem;
+  --local-display: block;
+  --url-display: none;
+}
+
+.file-label-group {
+  display: flex;
+  gap: 0.375rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.label {
+  margin-bottom: 0.5rem;
+}
+
+.file-label-group label {
+  margin-bottom: 0rem;
+}
+
+.file-url-label {
+  display: var(--url-display);
+}
+
+.file-local-label {
+  display: var(--local-display);
+}
+
+.file-checkbox-toggle {
+  height: 1.25rem;
+  width: 2.25rem;
+  border-radius: 10rem;
+  position: relative;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+}
+
+.file-checkbox-toggle:before {
+  content: "";
+  position: absolute;
+
+  height: 0.75rem;
+  width: 0.75rem;
+  background: white;
+  border-radius: 100%;
+  transition: all 0.2s ease;
+  transform: translateX(var(--toggle-x));
+}
+
+.file-toggle-help {
+  color: var(--help-color);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  margin-left: 0.25rem;
+}
+
+.file-url {
+  display: var(--url-display);
+}
+
+.file-local {
+  display: var(--local-display);
+  margin: 1rem 0;
+}
+
+.file-cards {
+  display: flex;
+  margin: 1rem 0;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.file-cards .no-files {
+  text-align: center;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.file-card {
+  display: flex;
+  align-items: center;
+  width: 160px;
+  height: 160px;
+  border: 0.25rem;
+  background: #eaeaea;
+  transition: transform 0.2s ease;
+  position: relative;
+  cursor: pointer;
+  border-radius: 0.75rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.file-card.file-card-editing {
+  box-shadow: 21px 59px 25px rgba(0, 123, 255, 0.03),
+    12px 33px 21px rgba(0, 123, 255, 0.1), 5px 15px 16px rgba(0, 123, 255, 0.16),
+    1px 4px 9px rgba(0, 123, 255, 0.19), 0px 0px 0px rgba(0, 123, 255, 0.19);
+}
+
+.file-card:hover {
+  transform: scale(0.95);
+}
+
+.file-card-inner {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  max-height: 100%;
+  pointer-events: none;
+}
+
+.file-card img {
+  width: 100%;
+}
+
+.file-card button.file-card-remove {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+  height: 1.75rem;
+  width: 1.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  background: var(--danger);
+  color: white;
+  border: none;
+}
+
+.file-card button.file-card-remove i {
+  pointer-events: none;
+}
+
+.file-cards-outside {
+  margin: 0.5rem 0;
+  margin-left: 0.5rem;
+}
+
+.file-cards-outside .file-card {
+  width: 75px;
+  height: 75px;
+  box-shadow: none;
+}
+
+.file-cards-outside button.file-card-remove {
+  display: none;
+}
+
+.result {
+  padding: 1.5rem;
+  background: #eee;
+}
