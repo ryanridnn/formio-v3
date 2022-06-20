@@ -3,6 +3,10 @@
   --danger: #dc3545;
 }
 
+.table > :not(:first-child) {
+  border-top: 0 !important;
+}
+
 .csfile {
   background: #eee !important;
   border-radius: 1.25rem !important;
@@ -81,11 +85,11 @@
 }
 
 .file-url-label {
-  display: var(--url-display);
+  display: var(--url-display) !important;
 }
 
 .file-local-label {
-  display: var(--local-display);
+  display: var(--local-display) !important;
 }
 
 .file-checkbox-toggle {
@@ -118,11 +122,11 @@
 }
 
 .file-url {
-  display: var(--url-display);
+  display: var(--url-display) !important;
 }
 
 .file-local {
-  display: var(--local-display);
+  display: var(--local-display) !important;
   margin: 1rem 0;
 }
 

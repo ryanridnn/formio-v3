@@ -10,6 +10,7 @@ class MultipleFileSelect extends MultiValue {
 
 	constructor(component, options, data) {
 		super(component, options, data);
+		this.component.multiple = true;
 
 		this.files = [];
 		this.tempFiles = [];
@@ -26,7 +27,7 @@ class MultipleFileSelect extends MultiValue {
 			components: [
 				{
 					type: "fileModal",
-					label: "Select files...",
+					label: this.component.label,
 					data: this.component.data,
 					modalId: this.modalId,
 				},
@@ -77,10 +78,12 @@ class MultipleFileSelect extends MultiValue {
 	}
 
 	setValue(value) {
+		if (value === null) value = [];
 		if (value[0] === null) value = [];
 
 		this.files = value;
 		this.tempFiles = value;
+		this.renderFileCards();
 	}
 
 	// ------------------------------------
@@ -193,6 +196,17 @@ class MultipleFileSelect extends MultiValue {
 			this.setButtonState();
 		};
 
+		this.form.formCancel.onclick = (e) => {
+			this.editingId = null;
+
+			this.resetFormValue();
+
+			this.form.formSubmit.innerText = "Add file";
+			this.form.formCancel.classList.add("d-none");
+
+			this.renderFileCards();
+		};
+
 		this.form.formSubmit.onclick = async () => {
 			if (
 				this.component.max &&
@@ -260,6 +274,7 @@ class MultipleFileSelect extends MultiValue {
 
 				this.form.formSubmit.innerText = "Add file";
 				this.form.formCancel.classList.add("d-none");
+				this.editingId = null;
 			} else {
 				this.tempFiles = [
 					...this.tempFiles,
@@ -353,6 +368,9 @@ class MultipleFileSelect extends MultiValue {
 		if (id === this.editingId) {
 			this.resetFormValue();
 			this.editingId = null;
+
+			this.form.formSubmit.innerText = "Add file";
+			this.form.formCancel.classList.add("d-none");
 		}
 		this.renderFileCards();
 	}

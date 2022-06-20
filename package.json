@@ -12,8 +12,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.1.1",
-    "@popperjs/core": "^2.11.5",
-    "bootstrap": "5.2.0-beta1",
+    "bootstrap": "^5.0.0",
     "core^2.11.5": "link:@popperjs/core^2.11.5",
     "formiojs": "^4.14.8",
     "uuid": "^8.3.2"

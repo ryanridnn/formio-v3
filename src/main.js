@@ -22,6 +22,33 @@ Formio.use({
 Formio.createForm(document.getElementById("formio"), fields).then((form) => {
   const resultEl = document.querySelector(".result");
 
+  console.log(form);
+
+  form.submission = {
+    data: {
+      files: [
+        {
+          id: "dfjsofjhs",
+          type: "image/png",
+          title: "Hello world",
+          file: "https://picsum.photos/id/27/300/300",
+          thumbnail: "https://picsum.photos/id/27/300/300",
+        },
+        {
+          id: "dfjsofjhs",
+          type: "image/png",
+          title: "Hello world",
+          file: "https://picsum.photos/id/27/300/300",
+          thumbnail: "https://picsum.photos/id/27/300/300",
+        },
+      ],
+    },
+  };
+
+  document.querySelector("#while").onclick = () => {
+    console.log(form);
+  };
+
   document.querySelectorAll(".formio-button-remove-row").forEach((el) => {
     el.innerHTML = '<i class="fa-solid fa-xmark"></i>';
   });
@@ -37,6 +64,5 @@ Formio.createForm(document.getElementById("formio"), fields).then((form) => {
 
   form.on("submit", (submission) => {
     resultEl.innerText = JSON.stringify(form.data, null, 2);
-    console.log(submission.data);
   });
 });

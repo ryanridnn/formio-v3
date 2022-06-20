@@ -2,10 +2,8 @@ export default {
 	components: [
 		{
 			type: "multipleFileSelect",
-			label: "Select file...",
+			label: "Select files",
 			key: "files",
-			multiple: "true",
-			refreshOn: "file",
 			max: 4,
 			validate: {
 				required: true,
@@ -29,9 +27,8 @@ export default {
 			components: [
 				{
 					type: "multipleFileSelect",
-					label: "Select file...",
+					label: "Select files",
 					key: "files",
-					multiple: "true",
 					max: 4,
 				},
 				{
