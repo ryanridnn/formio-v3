@@ -22,7 +22,7 @@ Formio.use({
 Formio.createForm(document.getElementById("formio"), fields).then((form) => {
   const resultEl = document.querySelector(".result");
 
-  console.log(form);
+  console.log(form.components[0].component.max);
 
   form.submission = {
     data: {

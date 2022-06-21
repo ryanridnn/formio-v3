@@ -8,18 +8,29 @@ class MultipleFileSelect extends MultiValue {
 	// ------ START: MAIN METHOds ---------
 	// ------------------------------------
 
+	// Methods in "MAIN METHODS" are required by Form io
+
 	constructor(component, options, data) {
 		super(component, options, data);
 		this.component.multiple = true;
 
+		// Files always has the same value with the value in the kry given in the component object
+		// But it is not changed, when the value in the popup changed, whether addition, deletion, update happens
+		// Eventually, It will be renewed when the popup is submitted
 		this.files = [];
+
+		// this will store temporary value when popup inputs are changing it's value
+		// when user submit the popup, the this.files value will be assigned with the this.tempFiles
 		this.tempFiles = [];
 
 		this.modalId = this.id;
 		this.editingId = null;
 	}
 
+	// It will called when th4e form needed to render the from
+
 	render() {
+		// This is using another components, the fileModal custom components and fileList custom components
 		const well = new Components.components.well({
 			type: "well",
 			customClass: "csfile",
@@ -40,7 +51,11 @@ class MultipleFileSelect extends MultiValue {
 		return well.render();
 	}
 
+	// this is called after render methods
+	// maily use to retrieve refs and passing event listener to refs
+
 	attach(element) {
+		// The refs are being grouped, to tidy up and organize
 		let refs = {
 			"file-cards": "mutiple",
 		};
@@ -66,8 +81,10 @@ class MultipleFileSelect extends MultiValue {
 
 		refs = { ...refs, ...modalrefs, ...formrefs };
 
+		// loading refs
 		this.loadRefs(element, refs);
 
+		// setuping components: Passing event listeners, etc
 		this.setup();
 
 		return super.attach(element);
@@ -77,6 +94,7 @@ class MultipleFileSelect extends MultiValue {
 		return this.files;
 	}
 
+	// It will be called when the user give default values to the form
 	setValue(value) {
 		if (value === null) value = [];
 		if (value[0] === null) value = [];
@@ -94,6 +112,7 @@ class MultipleFileSelect extends MultiValue {
 	// ------ START: CUSTOM METHOds ---------
 	// -------------------------------------
 
+	// It calls various methods for setuping each different elements group
 	setup() {
 		this.setupVar();
 		this.setupModalElements();
@@ -101,9 +120,20 @@ class MultipleFileSelect extends MultiValue {
 		this.setupFileCardsElements();
 	}
 
+	// Make different properties in the object to avoid using this.refs
+	// this.refs. needed brackets to access it, so it's not quite clean
+	// however you can change this behaviour by passing the refs in component
+	//   as camelCases, snake_case, or another case without dash(-) a
+
 	setupVar() {
 		this.fileElements = {
 			cards: this.refs["file-cards"],
+		};
+
+		this.modal = {
+			open: this.refs["modal-open"],
+			save: this.refs["modal-save"],
+			cancel: this.refs["modal-cancel"],
 		};
 
 		this.form = {
@@ -120,20 +150,33 @@ class MultipleFileSelect extends MultiValue {
 		};
 	}
 
+	// mainly, this add event listeners to modal element
 	setupModalElements() {
-		this.refs["modal-open"].onclick = () => {
+		// do task when MODAL OPEN BUTTON is clicked
+		this.modal.open.onclick = () => {
+			// setting temp files to current files values
 			this.tempFiles = [...this.files];
+
+			// resetting values
 			this.editingId = null;
 			this.resetFormValue();
+
+			// render the file cards
 			this.renderFileCards();
 		};
 
-		this.refs["modal-save"].onclick = () => {
+		// do task when MODAL OPEN SAVE is clicked
+		this.modal.save.onclick = () => {
+			// save the changes in the popup inputs
 			this.files = [...this.tempFiles];
+
+			// resetting editing id
 			this.editingId = null;
 			this.renderFileCards();
 
+			// This methods set the current value of the given key with the files value
 			this.data[this.component.key] = this.files.map((file) => {
+				// Due to form io is cannot accepting File object, we must convert files with base64 string instead
 				const item = file;
 
 				if (file.file.src) {
@@ -152,7 +195,8 @@ class MultipleFileSelect extends MultiValue {
 			});
 		};
 
-		this.refs["modal-cancel"].onclick = () => {
+		// do task when MODAL CANCEL BUTTON is clicked
+		this.modal.cancel.onclick = () => {
 			this.tempFiles = [...this.files];
 			this.editingId = null;
 			this.data[this.component.key] = this.files;
@@ -164,6 +208,8 @@ class MultipleFileSelect extends MultiValue {
 
 		this.form.formCancel.classList.add("d-none");
 
+		// add event listener to check if button should be disabled or not
+		// If it is pretty cluttered, we can use an array loop then passing the onclick within it
 		this.form.title.oninput = () => {
 			this.setButtonState();
 		};
