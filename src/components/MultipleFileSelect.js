@@ -14,7 +14,7 @@ class MultipleFileSelect extends MultiValue {
 		super(component, options, data);
 		this.component.multiple = true;
 
-		// Files always has the same value with the value in the kry given in the component object
+		// Files always has the same value with the value in the key given in the component schema
 		// But it is not changed, when the value in the popup changed, whether addition, deletion, or update happens
 		// Eventually, It will be renewed when the popup is submitted
 		this.files = [];
@@ -122,10 +122,10 @@ class MultipleFileSelect extends MultiValue {
 		this.setupFileCardsElements();
 	}
 
-	// Make different properties in the object to avoid using this.refs
-	// this.refs. needed brackets to access it, so it's not quite clean
+	// Make different properties in the instance to avoid using this.refs
+	// this.refs needed brackets to access it, so it's not quite clean
 	// however you can change this behaviour by passing the refs in component
-	//   as camelCases, snake_case, or another case without dash(-) a
+	//   as camelCases, snake_case, or another case without dash(-)
 
 	setupVar() {
 		this.fileElements = {
@@ -156,7 +156,7 @@ class MultipleFileSelect extends MultiValue {
 	setupModalElements() {
 		// do task when MODAL OPEN BUTTON is clicked
 		this.modal.open.onclick = () => {
-			// setting temp files to current files values
+			// setting this,tempFiles to current this.files values
 			this.tempFiles = [...this.files];
 
 			// resetting values
