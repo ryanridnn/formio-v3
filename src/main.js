@@ -5,14 +5,14 @@ import "./formio.css";
 import "./style.css";
 import { Formio, Components } from "formiojs";
 
-// import custom components
+// import the custom components
 import MultipleFileSelect from "./components/MultipleFileSelect.js";
 import FileModal from "./components/FileModal.js";
 import FileList from "./components/FileList.js";
 
 import fields from "./fields";
 
-// register custom components
+// register the custom components
 Formio.use({
   components: {
     multipleFileSelect: MultipleFileSelect,
