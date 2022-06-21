@@ -1,3 +1,4 @@
+// form schema
 export default {
 	components: [
 		{

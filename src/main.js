@@ -5,12 +5,14 @@ import "./formio.css";
 import "./style.css";
 import { Formio, Components } from "formiojs";
 
+// import custom components
 import MultipleFileSelect from "./components/MultipleFileSelect.js";
 import FileModal from "./components/FileModal.js";
 import FileList from "./components/FileList.js";
 
 import fields from "./fields";
 
+// register custom components
 Formio.use({
   components: {
     multipleFileSelect: MultipleFileSelect,
@@ -19,11 +21,14 @@ Formio.use({
   },
 });
 
+// initialize form
 Formio.createForm(document.getElementById("formio"), fields).then((form) => {
   const resultEl = document.querySelector(".result");
 
+  // retrieve the max count value of multipleFileSelect component
   console.log(form.components[0].component.max);
 
+  // giving inital value to the form
   form.submission = {
     data: {
       files: [
@@ -45,24 +50,19 @@ Formio.createForm(document.getElementById("formio"), fields).then((form) => {
     },
   };
 
-  document.querySelector("#while").onclick = () => {
-    console.log(form);
-  };
-
-  document.querySelectorAll(".formio-button-remove-row").forEach((el) => {
-    el.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-  });
-
+  // render the inital value of the form
   resultEl.innerText = JSON.stringify(form.data, null, 2);
 
   form.on("change", (e) => {
+    // somehow the remove icon in data grid is not showing,
+    // so this replace the icon
     document.querySelectorAll(".formio-button-remove-row").forEach((el) => {
       el.innerHTML = '<i class="fa-solid fa-xmark"></i>';
     });
-    // console.log(e.changed);
   });
 
   form.on("submit", (submission) => {
+    // rendering the submitted value of the form
     resultEl.innerText = JSON.stringify(form.data, null, 2);
   });
 });

@@ -15,22 +15,22 @@ class MultipleFileSelect extends MultiValue {
 		this.component.multiple = true;
 
 		// Files always has the same value with the value in the kry given in the component object
-		// But it is not changed, when the value in the popup changed, whether addition, deletion, update happens
+		// But it is not changed, when the value in the popup changed, whether addition, deletion, or update happens
 		// Eventually, It will be renewed when the popup is submitted
 		this.files = [];
 
 		// this will store temporary value when popup inputs are changing it's value
-		// when user submit the popup, the this.files value will be assigned with the this.tempFiles
+		// when user submit the popup, the this.files value will be assigned with the this.tempFiles value
 		this.tempFiles = [];
 
 		this.modalId = this.id;
 		this.editingId = null;
 	}
 
-	// It will called when th4e form needed to render the from
+	// used for rendering the component to view
 
 	render() {
-		// This is using another components, the fileModal custom components and fileList custom components
+		// this has the child of fileModal and fileList custom component.
 		const well = new Components.components.well({
 			type: "well",
 			customClass: "csfile",
@@ -51,8 +51,8 @@ class MultipleFileSelect extends MultiValue {
 		return well.render();
 	}
 
-	// this is called after render methods
-	// maily use to retrieve refs and passing event listener to refs
+	// will be called after the render methods
+	// geberally, used for retrieving refs and passing event listener to refs
 
 	attach(element) {
 		// The refs are being grouped, to tidy up and organize
@@ -112,7 +112,9 @@ class MultipleFileSelect extends MultiValue {
 	// ------ START: CUSTOM METHOds ---------
 	// -------------------------------------
 
-	// It calls various methods for setuping each different elements group
+	// custom methods needed to build this compoenent
+
+	// This calls various methods for setuping each different elements group
 	setup() {
 		this.setupVar();
 		this.setupModalElements();
@@ -150,7 +152,7 @@ class MultipleFileSelect extends MultiValue {
 		};
 	}
 
-	// mainly, this add event listeners to modal element
+	// add event listeners to modal elements
 	setupModalElements() {
 		// do task when MODAL OPEN BUTTON is clicked
 		this.modal.open.onclick = () => {
@@ -176,8 +178,9 @@ class MultipleFileSelect extends MultiValue {
 
 			// This methods set the current value of the given key with the files value
 			this.data[this.component.key] = this.files.map((file) => {
-				// Due to form io is cannot accepting File object, we must convert files with base64 string instead
 				const item = file;
+
+				// decide whether the file is a local file or not
 
 				if (file.file.src) {
 					item.file = file.file.base64;
@@ -185,6 +188,7 @@ class MultipleFileSelect extends MultiValue {
 				} else {
 					item.localfile = false;
 				}
+				// decide whether the thunbnail is a local file or not
 				if (file.thumbnail.src) {
 					item.thumbnail = file.thumbnail.base64;
 					item.localThumbnail = true;
@@ -203,9 +207,11 @@ class MultipleFileSelect extends MultiValue {
 		};
 	}
 
+	// add event listeners to form elements
 	setupFormElements() {
 		this.setButtonState();
 
+		// initially hide the cancel button
 		this.form.formCancel.classList.add("d-none");
 
 		// add event listener to check if button should be disabled or not
@@ -230,17 +236,23 @@ class MultipleFileSelect extends MultiValue {
 			this.setButtonState();
 		};
 
+		// When toggled, the file input will be cleared
+
 		this.form.fileCheckbox.onclick = (e) => {
 			this.form.fileUrl.value = null;
 			this.form.fileLocal.value = null;
 			this.setButtonState();
 		};
 
+		// When toggled, the thumbnail input will be cleared
+
 		this.form.thumbnailCheckbox.onclick = (e) => {
 			this.form.thumbnailUrl.value = null;
 			this.form.thumbnailLocal.value = null;
 			this.setButtonState();
 		};
+
+		// When the cancel button is clicked, it will cancel editing
 
 		this.form.formCancel.onclick = (e) => {
 			this.editingId = null;
@@ -253,7 +265,10 @@ class MultipleFileSelect extends MultiValue {
 			this.renderFileCards();
 		};
 
+		// when the form submit button is clicked, It is Adding or updating this.tempFiles
+
 		this.form.formSubmit.onclick = async () => {
+			// restrict adding files to prevent files from exceeding the max count
 			if (
 				this.component.max &&
 				this.tempFiles.length === this.component.max &&
@@ -271,6 +286,7 @@ class MultipleFileSelect extends MultiValue {
 
 			const formValue = this.getFormValue();
 
+			// restrict users from selecting invalid local thumbnail type
 			if (
 				formValue.thumbnail.type &&
 				formValue.thumbnail.type.split("/")[0] !== "image"
@@ -279,6 +295,7 @@ class MultipleFileSelect extends MultiValue {
 				return;
 			}
 
+			// set the file type as 'external-file', if the provided value is a link
 			const type = formValue.file.type
 				? formValue.file.type
 				: "external-file";
@@ -288,6 +305,8 @@ class MultipleFileSelect extends MultiValue {
 			let file;
 			let thumbnail;
 
+			// Due to form io is not accepting File object, we must convert files to base64 string instead
+			// upload the base64 files and host in in your server
 			if (formValue.file.type) {
 				file = {
 					src: formValue.file,
@@ -306,6 +325,7 @@ class MultipleFileSelect extends MultiValue {
 				thumbnail = formValue.thumbnail;
 			}
 
+			// if in editing state, update the File Instead
 			if (this.editingId) {
 				const fileIndex = this.tempFiles.findIndex(
 					(file) => file.id === this.editingId
@@ -318,10 +338,13 @@ class MultipleFileSelect extends MultiValue {
 					thumbnail,
 				};
 
+				// set the add button to "add file", and hide the cancel buton
 				this.form.formSubmit.innerText = "Add file";
 				this.form.formCancel.classList.add("d-none");
 				this.editingId = null;
-			} else {
+			}
+			// If not in editing state, add the file
+			else {
 				this.tempFiles = [
 					...this.tempFiles,
 					{
@@ -334,25 +357,32 @@ class MultipleFileSelect extends MultiValue {
 				];
 			}
 
+			// rerender the cards to show changes, and reset the form
 			this.renderFileCards();
 			this.resetFormValue();
 		};
 	}
 
 	setupFileCardsElements() {
+		// setting click event listener to the parents of file cards
 		this.fileElements.cards.forEach((fileCards) => {
 			fileCards.onclick = (e) => {
+				// if target is the 'remove button', remove the File
 				if (e.target.classList.contains("file-card-remove")) {
 					this.removeFile(e.target.dataset.id);
+					// if target is the 'file card', update the File
+					// make the component to editing state
 				} else if (e.target.classList.contains("file-card")) {
 					this.setUpdate(e.target.dataset.id);
 				}
 			};
 		});
 
+		// initial file cards render
 		this.renderFileCards();
 	}
 
+	// getting the form value
 	getFormValue() {
 		const title = this.form.title.value;
 		let file = this.form.fileUrl.value || this.form.fileLocal.files[0];
@@ -368,6 +398,7 @@ class MultipleFileSelect extends MultiValue {
 		};
 	}
 
+	// set the button whether it should be disabled or not
 	setButtonState() {
 		const { title, file, thumbnail } = this.getFormValue();
 
@@ -378,18 +409,24 @@ class MultipleFileSelect extends MultiValue {
 		}
 	}
 
+	// set the component to updating state
 	setUpdate(id) {
 		this.editingId = id;
 
+		// replace the text in 'Add File' button to "Update', and display the cancel button
 		this.form.formSubmit.innerText = "Update";
 		this.form.formCancel.classList.remove("d-none");
 
 		this.renderFileCards();
 
+		// filling the form with value of the file that has the id of the parameter id
 		this.fillForm(this.tempFiles.find((file) => file.id === id));
 	}
 
 	fillForm(data) {
+		// filling the form with given value
+		// it cannot accept local file, use url only
+
 		this.form.title.value = data.title;
 		if (!data.file.src) {
 			this.form.fileUrl.value = data.file;
@@ -400,6 +437,7 @@ class MultipleFileSelect extends MultiValue {
 		}
 	}
 
+	// resetting the form value
 	resetFormValue() {
 		this.form.title.value = null;
 		this.form.fileUrl.value = null;
@@ -409,8 +447,11 @@ class MultipleFileSelect extends MultiValue {
 		this.setButtonState();
 	}
 
+	// removing a file from this.tempFiles
 	removeFile(id) {
 		this.tempFiles = this.tempFiles.filter((file) => file.id !== id);
+
+		// if the target of removal is currently being edited, it will cancel the editing
 		if (id === this.editingId) {
 			this.resetFormValue();
 			this.editingId = null;
@@ -418,9 +459,12 @@ class MultipleFileSelect extends MultiValue {
 			this.form.formSubmit.innerText = "Add file";
 			this.form.formCancel.classList.add("d-none");
 		}
+
+		// render to show changes
 		this.renderFileCards();
 	}
 
+	// show alert in case there are errors
 	showAlert(message, time = 0.5) {
 		this.form.alert.innerHTML = message;
 		this.form.alert.classList.replace("d-none", "d-block");
@@ -431,6 +475,7 @@ class MultipleFileSelect extends MultiValue {
 		}, time * 1000);
 	}
 
+	// convert local file to base64 string, you need to host the file in the server
 	async convertFile(file) {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
@@ -440,10 +485,14 @@ class MultipleFileSelect extends MultiValue {
 		});
 	}
 
+	// render the file cards
 	renderFileCards() {
 		this.fileElements.cards.forEach((filecards) => {
+			// if the card list is inside the popup, do this logic
 			if (filecards.dataset.inside === "true") {
 				let template = this.getFileCardsTemplate(this.tempFiles);
+
+				// if there are no single file, render an info
 				if (template === "") {
 					template = `
 						<div class="no-files">
@@ -452,7 +501,10 @@ class MultipleFileSelect extends MultiValue {
 					`;
 				}
 				filecards.innerHTML = template;
-			} else {
+			}
+			// if the card list is outside the popup, do this logic
+			else {
+				// if there are no single file, hide the list
 				filecards.classList.remove("d-none");
 				if (this.files.length === 0) {
 					filecards.classList.add("d-none");
@@ -466,6 +518,9 @@ class MultipleFileSelect extends MultiValue {
 
 	// ---- START: TEMPLATE GENERATOR -----
 
+	// methods that returned templates
+
+	// this methods returning template of file list
 	getFileCardsTemplate(files, canOpenModal = false) {
 		let template = "";
 

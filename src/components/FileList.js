@@ -12,6 +12,7 @@ class FileList extends Component {
 	}
 
 	render() {
+		// render this component
 		const component = new Components.components.htmlelement({
 			type: "htmlelement",
 			tag: "div",
@@ -29,6 +30,7 @@ class FileList extends Component {
 	// ------ START: CUSTOM METHOds ---------
 	// --------------------------------------
 
+	// return file list templat
 	getTemplate() {
 		const template = `
 			<div ref="file-cards" class="file-cards file-cards-outside">

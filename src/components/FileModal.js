@@ -18,6 +18,7 @@ class FileModal extends Component {
 			customClass: "file-modal",
 		});
 
+		// render the modal
 		return modal.render(template);
 	}
 
@@ -29,7 +30,12 @@ class FileModal extends Component {
 	// ------ START: CUSTOM METHOds ---------
 	// --------------------------------------
 
+	// these template methods are being grouped by descending order, from parent to inner child
+	// the tree: getTemplate => getModalTemplate => getFormTemplate
+
+	// return the modal open button, and the modal
 	getTemplate() {
+		// get the modal template
 		const modalTemplate = this.getModalTemplate();
 
 		const template = `
@@ -40,7 +46,9 @@ class FileModal extends Component {
 		return template;
 	}
 
+	// get the modak template
 	getModalTemplate() {
+		// get the form template
 		const formTemplate = this.getFormTemplate();
 		const modalTemplate = `
 			<div class="modal file-modal fade" id="${this.component.modalId}" tabindex="-1" aria-labelledby="${this.component.modalId}" aria-hidden="true">
@@ -69,6 +77,7 @@ class FileModal extends Component {
 		return modalTemplate;
 	}
 
+	// get the form template
 	getFormTemplate() {
 		const template = `
 			<div class="file-form">
